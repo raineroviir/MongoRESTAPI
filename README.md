@@ -1,13 +1,11 @@
-Create a single resource rest API with Express that's backed by Mongo. I'm leaving this pretty open to interpretation. I want you to write this from scratch, don't just copy and paste code from class or previous projects. Add a feature of Mongoose that we didn't use class, such as data validation.
+Add authentication using BasicHTTP and Tokens to your single resource. Make sure you use the asynchronous version of the bcrypt hashing functions and provide validation to make all incoming emails unique.
 
  
 
-Rubric
+Unique Emails: 2pts
 
-Use of Express: 3pts
+Async Bcrypt: 2pts
 
-Use of Mongo: 3pts
+Testing: 2pts
 
-Tests: 2pts
-
-Project Organization: 2pts
+Auth middleware: 4pts

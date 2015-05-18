@@ -1,3 +1,5 @@
+var eatAuth = require('../lib/eat_auth')(process.env.APP_SECRET);
+
 var Comment = require('../models/Comment');
 var bodyparser = require('body-parser');
 
@@ -5,6 +7,7 @@ module.exports = function(router) {
 	router.use(bodyparser.json());
 
 	router.get('/comments', function(req, res) {
+		//Comment.find{authorID: req.user._id} 
 		Comment.find({}, function(err, data) {
 					if (err) {
 			console.log(err);
@@ -26,7 +29,8 @@ module.exports = function(router) {
 		});
 	});
 
-	router.post('/comments', function(req, res) {
+	router.post('/comments', eatAuth, function(req, res) {
+		//newNote.authorId = req.user._id;
 		var newComment = new Comment(req.body);
 		newComment.save(function(err, data) {
 			if (err) {
@@ -38,7 +42,8 @@ module.exports = function(router) {
 		});
 	});
 
-	router.put('/comments/:id', function(req, res) {
+	router.put('/comments/:id', eatAuth, function(req, res) {
+		//if req.
 		var updatedComment = req.body;
 		delete updatedComment._id;
 
@@ -52,7 +57,8 @@ module.exports = function(router) {
 		});
 	});
 
-	router.delete('/comments/:id', function(req, res) {
+	router.delete('/comments/:id', eatAuth, function(req, res) {
+		//Note.find({'_id: req.params.id'}, function(err, data) {} 
 		Comment.remove({'_id': req.params.id}, function(err, data) {
 			if(err) {
 				console.log(err);

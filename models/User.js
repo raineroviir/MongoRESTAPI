@@ -4,19 +4,40 @@ var mongoose = require('mongoose');
 var bcrypt = require('bcrypt');
 var eat = require('eat');
 var userSchema = mongoose.Schema({
-	username: String,
+	username: { type: String, required: true },
 	basic: {
-		email: String,
-		password: String
+		email: { type: String, required: true, unique: true },
+		password: { type: String }
 	}
 });
 
-userSchema.methods.generateHash = function(password) {
-	return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+userSchema.methods.generateHash = function(password, salt, next) {
+
+	bcrypt.genSalt(salt, function(err, salt) {
+		if (err) {
+			return next(err);
+		}
+
+	bcrypt.hash(password, salt, function(err, hash) {
+		if (err) {
+			return next(err);
+		}
+
+		next(null, hash);
+	});
+	})
 };
 
-userSchema.methods.checkPassword = function(password) {
-	return bcrypt.compareSync(password, this.basic.password);
+userSchema.methods.checkPassword = function(password, cb) {
+
+	bcrypt.compare(password, this.basic.password, function(err, response) {
+		if (err) {
+			return cb(err);
+		}
+		
+		console.log(response);
+		cb(null, response);
+	});
 };
 
 userSchema.methods.generateToken = function(secret, callback) {

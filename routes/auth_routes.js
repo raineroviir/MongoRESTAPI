@@ -6,13 +6,22 @@ var bodyparser = require('body-parser');
 module.exports = function(router, passport) {
 		router.use(bodyparser.json());
 
-		router.post('/create_user', function(req, res) {
+		router.post('/create_user', function(req, res, cb) {
 			var newUserData = JSON.parse(JSON.stringify(req.body));
 			delete newUserData.email;
 			delete newUserData.password;
 			var newUser = new User(newUserData);
 			newUser.basic.email = req.body.email;
-			newUser.basic.password = newUser.generateHash(req.body.password);
+
+			newUser.generateHash(req.body.password, 8, function (err, hash) {
+				if (err) {
+					console.log(err)
+				}
+
+				newUser.basic.password = hash;
+				saveFunc();
+			});
+			function saveFunc() {
 			newUser.save(function(err, user) {
 				if(err) {
 					console.log(err);
@@ -28,6 +37,7 @@ module.exports = function(router, passport) {
 					res.json({token: token});	
 				});
 			});
+			};
 		});
 
 		router.get('/sign_in', passport.authenticate('basic', {session: false}), function(req, res) {

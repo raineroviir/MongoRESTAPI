@@ -15,21 +15,6 @@ var User = require('../models/User');
 
 describe('my mongo REST API', function () {
 
-	var testToken = '';
-	before(function(done) {
-    chai.request('localhost:3000')
-      .post('/api/user/create_user')
-      .send({email: 'user3@test.com', username: 'testUser3', password: 'foobar'})
-      .end(function(err, res) {
-        testToken = res.body.token;
-        expect(err).to.eql(null);
-        expect(res.body.username).to.eql('testUser3');
-        expect(res.body.token.length).to.eql(96);
-        expect(res.status).to.eql(200);
-        done();
-     });
-  });
-
 	after(function(done) {
 		mongoose.connection.db.dropDatabase(function() {
 			done();

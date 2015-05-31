@@ -2,6 +2,6 @@
 
 require('angular/angular');
 
-var commentsApp = angular.module('commentsApp', []);
+var notesApp = angular.module('notesApp', []);
 
-require('./comments/controllers/comments_controller')(commentsApp);
+require('./notes/controllers/notes_controller')(notesApp);

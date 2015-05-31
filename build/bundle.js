@@ -48,9 +48,9 @@
 
 	__webpack_require__(1);
 
-	var commentsApp = angular.module('commentsApp', []);
+	var notesApp = angular.module('notesApp', []);
 
-	__webpack_require__(2)(commentsApp);
+	__webpack_require__(2)(notesApp);
 
 
 /***/ },
@@ -28198,48 +28198,48 @@
 	'use strict';
 
 	module.exports = function(app) {
-	  app.controller('commentsController', ['$scope', '$http', function($scope, $http) {
+	  app.controller('notesController', ['$scope', '$http', function($scope, $http) {
 	    $scope.errors = [];
-	    $scope.comments = [];
+	    $scope.notes = [];
 
 	    $scope.getAll = function() {
-	      $http.get('/api/comments')
+	      $http.get('/api/notes')
 	        .success(function(data) {
-	          $scope.comments = data;
+	          $scope.notes = data;
 	        })
 	        .error(function(data) {
 	          console.log(data);
-	          $scope.errors.push({msg: 'error retrieving comments'});
+	          $scope.errors.push({msg: 'error retrieving notes'});
 	        });
 	    };
 
-	    $scope.createnewComment = function() {
-	      $http.post('/api/comments', $scope.newComment)
+	    $scope.createNewNote = function() {
+	      $http.post('/api/notes', $scope.newNote)
 	        .success(function(data) {
-	          $scope.comments.push(data);
-	          $scope.newComment = null; 
+	          $scope.notes.push(data);
+	          $scope.newNote = null; 
 	        })
 	        .error(function(data) {
 	          console.log(data);
-	          $scope.errors.push({msg: 'could not create new comment'});
+	          $scope.errors.push({msg: 'could not create new note'});
 	        })
 	    };
 
-	    $scope.removeComment = function(comment) {
-	      $scope.comments.splice($scope.comments.indexOf(comment), 1);
-	      $http.delete('/api/comments/' + comment._id)
+	    $scope.removeNote = function(note) {
+	      $scope.notes.splice($scope.notes.indexOf(note), 1);
+	      $http.delete('/api/notes/' + note._id)
 	        .error(function(data) {
 	          console.log(data);
-	          $scope.errors.push({msg: 'could not remove comment: ' + comment.commentBody});
+	          $scope.errors.push({msg: 'could not remove note: ' + note.noteBody});
 	        });
 	    };
 
-	    $scope.saveComment = function(comment) {
-	      comment.editing = false;
-	      $http.put('/api/comments/' + comment._id, comment)
+	    $scope.saveNote = function(note) {
+	      note.editing = false;
+	      $http.put('/api/notes/' + note._id, note)
 	        .error(function(data) {
 	          console.log(data);
-	          $scope.errors.push({msg: 'could not update comment'});
+	          $scope.errors.push({msg: 'could not update note'});
 	        });
 	    };
 

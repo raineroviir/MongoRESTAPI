@@ -15,6 +15,21 @@ var User = require('../models/User');
 
 describe('my mongo REST API', function () {
 
+	var testToken = '';
+	before(function(done) {
+    chai.request('localhost:3000')
+      .post('/api/user/create_user')
+      .send({email: 'user3@test.com', username: 'testUser3', password: 'foobar'})
+      .end(function(err, res) {
+        testToken = res.body.token;
+        expect(err).to.eql(null);
+        expect(res.body.username).to.eql('testUser3');
+        expect(res.body.token.length).to.eql(96);
+        expect(res.status).to.eql(200);
+        done();
+     });
+  });
+
 	after(function(done) {
 		mongoose.connection.db.dropDatabase(function() {
 			done();
@@ -42,59 +57,4 @@ describe('my mongo REST API', function () {
 	// 		done();
 	// 	});
 	// });
-});
-
-describe('needs an existing note to work with', function() {
-
-	before(function(done) {
-		var testUser = new User({username: 'rainer', basic: {email: 'test@example.com', password: 'foobar'}});
-		chai.request('localhost:3000')
-		.post('/api/sign_in')
-		.send({})
-		testUser.save(function(err, data) {
-			if (err) throw err;
-			this.testUser = data;
-			done();
-			console.log(testUser.basic);
-		}.bind(this));
-	});
-
-	beforeEach(function(done) {
-		var testComment = new Comment({author: "rainer", commentBody: 'test comment'});
-		testComment.save(function(err, data) {
-			if (err) throw err;
-
-			this.testComment = data;
-			done();
-		}.bind(this));
-	});
-
-	it('should be able to make a comment in a beforeEach block', function() {
-		expect(this.testComment.commentBody).to.eql('test comment');
-		expect(this.testComment).to.have.property('_id');
-	});
-
-	it('PUT a comment', function(done) {
-		var update_id = this.testComment._id;
-		chai.request('localhost:3000')
-		.put('/api/comments/' + this.testComment._id)
-		.send({author: "me", commentBody: 'here is a new comment'})
-		.end(function(err, res) {
-			expect(err).to.eql(null);
-			expect(res.body.msg).to.eql(update_id + ' has been updated!');
-			done();
-		});
-	});
-
-	// it('DELETE a comment', function(done) {
-	// 	var del_id = this.testComment._id;
-	// 	chai.request('localhost:3000')
-	// 	.del('/api/comments/' + this.testComment._id)
-	// 	.end(function(err, res) {
-	// 		expect(err).to.eql(null);
-	// 		expect(res.body.msg).to.eql(del_id + ' has been deleted!');
-	// 		done();
-	// 	});
-	// });
-
 });

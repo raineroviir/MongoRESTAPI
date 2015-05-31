@@ -15,7 +15,3 @@ var commentSchema = mongoose.Schema({
 var Comment = mongoose.model('Comment', commentSchema);
 
 module.exports = exports = Comment;
-
-Comment.schema.path('author').validate(function (value) {
-	return /bob|rainer|arthur/i.test(value);
-}, 'Invalid author name');

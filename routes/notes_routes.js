@@ -18,7 +18,7 @@ module.exports = function(router) {
   });
 
   router.get('/notes/:id', function(req, res) {
-		Comment.find({'_id': req.params.id}, function(err, data) {
+		Note.find({'_id': req.params.id}, function(err, data) {
 			if (err) {
 				console.log(err);
 				return res.status(500).json({msg: 'internal server error'});

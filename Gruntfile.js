@@ -11,6 +11,7 @@ module.exports = function(grunt) {
 	grunt.registerTask('build:dev', ['webpack:client', 'copy:html']);
   grunt.registerTask('build', ['build:dev']);
   grunt.registerTask('default', ['build']);
+  grunt.registerTask('karma_test', ['webpack:karma']);
 
 	grunt.initConfig({
 		webpack: {
@@ -26,6 +27,14 @@ module.exports = function(grunt) {
         output: {
           path: 'test/client/',
           file: 'test_bundle.js'
+        }
+      },
+
+      karma: {
+        entry: __dirname + '/test/karma_tests/test_entry',
+        output: {
+          path: 'test/karma_tests/',
+          file: 'bundle.js'
         }
       }
     },

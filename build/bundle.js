@@ -28199,6 +28199,8 @@
 
 	module.exports = function(app) {
 	  app.controller('notesController', ['$scope', '$http', function($scope, $http) {
+	    // $scope.disableButton = true;
+	    var savedNoteBody = '';
 	    $scope.errors = [];
 	    $scope.notes = [];
 
@@ -28206,6 +28208,9 @@
 	      $http.get('/api/notes')
 	        .success(function(data) {
 	          $scope.notes = data;
+	          for (note in $scope.notes) {
+	            note.disableButton = false;
+	          }
 	        })
 	        .error(function(data) {
 	          console.log(data);
@@ -28213,16 +28218,21 @@
 	        });
 	    };
 
-	    $scope.createNewNote = function() {
+	    $scope.createNewNote = function(newNote) {
+	      newNote.disableButton = true;
+	      $scope.notes.push(newNote); 
 	      $http.post('/api/notes', $scope.newNote)
 	        .success(function(data) {
-	          $scope.notes.push(data);
 	          $scope.newNote = null; 
+	          $scope.notes[notes.length - 1].disableButton = false;
+	          console.log(data);
+	          $scope.$apply();
+
 	        })
 	        .error(function(data) {
 	          console.log(data);
 	          $scope.errors.push({msg: 'could not create new note'});
-	        })
+	        });
 	    };
 
 	    $scope.removeNote = function(note) {
@@ -28242,6 +28252,16 @@
 	          $scope.errors.push({msg: 'could not update note'});
 	        });
 	    };
+
+	    $scope.noteEditing = function(note) {
+	      note.editing = true;
+	      savedNoteBody = note.noteBody;
+	    }
+
+	    $scope.cancelNote = function(note) {
+	      note.editing = false;
+	      note.noteBody = savedNoteBody;
+	    }
 
 	    $scope.clearErrors = function() {
 	      $scope.errors = [];

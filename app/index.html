@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <title>Client Side</title>
 </head>
-<body data-ng-app="notesApp" ng-cloak>
-  <main class="ng-cloak" data-ng-controller="notesController" data-ng-init="getAll()">
+<body data-ng-app="notesApp">
+  <main data-ng-controller="notesController" data-ng-init="getAll()">
     <h1>Notes:</h1>
     <aside data-ng-if="errors.length">
       <h2>Errors:</h2>
@@ -23,11 +23,11 @@
     <ul data-ng-repeat="note in notes">
       <li>{{note.noteBody}}
           <button data-ng-click="removeNote(note)">Delete</button>
-          <button data-ng-if="!note.editing" data-ng-click="note.editing = true">Edit</button> 
+          <button data-ng-if="!note.editing" data-ng-click="noteEditing(note)">Edit</button> 
           <form name="{{'editing' + note._id}}" data-ng-if="note.editing" data-ng-submit="saveNote(note)">
             <input type="text" data-ng-model="note.noteBody">
             <button type="submit">Save Changes</button>
-            <button data-ng-click="note.editing=false">Cancel</button> 
+            <button data-ng-click="cancelNote(note)">Cancel</button> 
           </form> 
       </li>
     </ul>

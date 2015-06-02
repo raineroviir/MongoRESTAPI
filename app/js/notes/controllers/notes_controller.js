@@ -2,6 +2,7 @@
 
 module.exports = function(app) {
   app.controller('notesController', ['$scope', '$http', function($scope, $http) {
+    var savedNoteBody = '';
     $scope.errors = [];
     $scope.notes = [];
 
@@ -17,15 +18,16 @@ module.exports = function(app) {
     };
 
     $scope.createNewNote = function() {
+      $scope.notes.push($scope.newNote); 
       $http.post('/api/notes', $scope.newNote)
         .success(function(data) {
-          $scope.notes.push(data);
+          $scope.notes.splice(-1, 1, data)
           $scope.newNote = null; 
         })
         .error(function(data) {
           console.log(data);
           $scope.errors.push({msg: 'could not create new note'});
-        })
+        });
     };
 
     $scope.removeNote = function(note) {
@@ -45,6 +47,16 @@ module.exports = function(app) {
           $scope.errors.push({msg: 'could not update note'});
         });
     };
+
+    $scope.noteEditing = function(note) {
+      note.editing = true;
+      savedNoteBody = note.noteBody;
+    }
+
+    $scope.cancelNote = function(note) {
+      note.editing = false;
+      note.noteBody = savedNoteBody;
+    }
 
     $scope.clearErrors = function() {
       $scope.errors = [];

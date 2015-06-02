@@ -7,7 +7,7 @@ module.exports = function(router) {
 	router.use(bodyparser.json());
 
 	router.get('/comments', function(req, res) {
-		//Comment.find{authorID: req.user._id} 
+
 		Comment.find({}, function(err, data) {
 					if (err) {
 			console.log(err);
@@ -29,8 +29,8 @@ module.exports = function(router) {
 		});
 	});
 
-	router.post('/comments', eatAuth, function(req, res) {
-		//newNote.authorId = req.user._id;
+	router.post('/comments', function(req, res) {
+
 		var newComment = new Comment(req.body);
 		newComment.save(function(err, data) {
 			if (err) {
@@ -42,8 +42,8 @@ module.exports = function(router) {
 		});
 	});
 
-	router.put('/comments/:id', eatAuth, function(req, res) {
-		//if req.
+	router.put('/comments/:id', function(req, res) {
+
 		var updatedComment = req.body;
 		delete updatedComment._id;
 
@@ -57,8 +57,7 @@ module.exports = function(router) {
 		});
 	});
 
-	router.delete('/comments/:id', eatAuth, function(req, res) {
-		//Note.find({'_id: req.params.id'}, function(err, data) {} 
+	router.delete('/comments/:id', function(req, res) {
 		Comment.remove({'_id': req.params.id}, function(err, data) {
 			if(err) {
 				console.log(err);
@@ -69,7 +68,3 @@ module.exports = function(router) {
 		});
 	});
 };
-
-//superagent localhost:3000/api/comments
-//post works with mongo + mongod running
-//get works, returns all the comments

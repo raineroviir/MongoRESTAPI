@@ -21,7 +21,7 @@ module.exports = function(app) {
       $scope.notes.push($scope.newNote); 
       $http.post('/api/notes', $scope.newNote)
         .success(function(data) {
-          $scope.notes.splice(-1, 1, data)
+          $scope.notes.splice($scope.notes.indexOf($scope.newNote), 1, data);
           $scope.newNote = null; 
         })
         .error(function(data) {

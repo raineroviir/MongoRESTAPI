@@ -47,17 +47,16 @@ describe('notes controller', function() {
       $scope.getAll();
       $httpBackend.flush();
       expect($scope.errors.length).toBe(1);
-      expect($scope.errors[0].msg).toBe('error retrieving notes');
+      expect($scope.errors[0].msg).toBe('error retrieving note');
     });
 
     it('should be able to save a new note', function() {
-      $scope.newNote = {noteBody: 'test note'};
-      $httpBackend.expectPOST('/api/notes').respond(200, {_id: '2', noteBody: 'test note'});
-      $scope.createNewNote();
+      var note = {_id: '2', noteBody: 'test note'};
+      $httpBackend.expectPOST('/api/notes').respond(200, note);
+      $scope.createNewNote(note);
       $httpBackend.flush();
-      expect($scope.notes[0].noteBody).toBe('test note'); 
       expect($scope.notes[0]._id).toBe('2');
-      expect($scope.newNote).toBe(null);
+      expect($scope.newNote).toBe(undefined);
     });
 
     it('should be able to edit/put a note', function() {
@@ -90,7 +89,7 @@ describe('notes controller', function() {
       expect($scope.notes.indexOf(note)).toBe(-1);
       $httpBackend.flush();
       expect($scope.errors.length).toBe(1);
-      expect($scope.errors[0].msg).toBe('could not remove note: ' + note.noteBody);
+      expect($scope.errors[0].msg).toBe('could not remove note');
     });
   });
 });

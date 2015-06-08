@@ -4,13 +4,10 @@ module.exports = function(app) {
   app.directive('alertsDirective', function() {
     return {
       restrict: 'A',
-      replace: true,
-      template: '/templates/directives/alerts.html',
-      scope: {},
+      templateUrl: 'templates/views/alerts.html',
+      scope: true,
       controller: function($scope) {
-
-      console.log($scope);
-      $scope.alerts = ['lalalalalal'];
+      $scope.alerts = [];
       
       $scope.addAlert = function(type, msg) {
         $scope.alerts = [];

@@ -7,28 +7,13 @@ module.exports = function(app) {
       restrict: 'AE',
       replace: true,
       transclude: true,
-      templateUrl: '/templates/directives/note_form.html',
+      templateUrl: '/templates/notes/note_form.html',
       scope: {
         save: '&',
         buttonText: '=',
         labelText: '@',
-        note: '=',
-        notifyParent: '&method'
-      },
-      controller: function($scope) {
-      $scope.removing = false;
-      $scope.startRemove = function() {
-        $scope.removing = true;
-      };
-
-      $scope.cancelRemove = function() {
-        $scope.removing = false;
-      };
-      
-      $scope.confirmRemove = function() {
-        $scope.notifyParent();
-      };
-    }
+        note: '='
+      }
     };
   });
 };

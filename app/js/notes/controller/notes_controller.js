@@ -5,7 +5,6 @@ module.exports = function(app) {
     var Note = resource('notes');
     $scope.errors = [];
     $scope.notes = [];
-    $scope.removing = false;
 
     $scope.getAll = function() {
       Note.getAll(function(err, data) {
@@ -31,18 +30,6 @@ module.exports = function(app) {
           $scope.errors.push({msg: 'could not remove note'});
         }
       });
-    };
-
-    $scope.startRemove = function() {
-      $scope.removing = true;
-    };
-
-    $scope.cancelRemove = function() {
-      $scope.removing = false;
-    };
-    
-    $scope.confirmRemove = function() {
-      $scope.notifyParent();
     };
 
     $scope.saveNote = function(note) {

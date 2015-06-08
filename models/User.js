@@ -5,8 +5,8 @@ var bcrypt = require('bcrypt');
 var eat = require('eat');
 var uuid = require('uuid');
 var userSchema = mongoose.Schema({
-	username: { type: String, unique: true },
-	email: { type: String, default: 'no email provided' },
+	username: String,
+	email: String,
 	password: String,
 	uniqueHash: String
 });
@@ -38,7 +38,7 @@ userSchema.methods.checkPassword = function(password, cb) {
 };
 
 userSchema.methods.generateToken = function(secret, callback) {
-	eat.encode({id: this.uniqueHash, timestamp: Date.now()}, secret, callback);
+	eat.encode({id: this._id}, secret, callback);
 };
 
 userSchema.methods.owns = function(obj) {

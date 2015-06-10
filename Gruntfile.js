@@ -7,11 +7,13 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-simple-mocha');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-nodemon');
+  grunt.loadNpmTasks('grunt-karma');
 	grunt.registerTask('test', ['jshint:dev', 'simplemocha:unit_tests']);
 	grunt.registerTask('build:dev', ['webpack:client', 'copy:html']);
   grunt.registerTask('build', ['build:dev']);
-  grunt.registerTask('default', ['build']);
-  grunt.registerTask('karma_test', ['webpack:karma']);
+  grunt.registerTask('karma_test', ['webpack:karma', 'karma:unit']);
+  grunt.registerTask('start', ['nodemon:dev']);
 
 	grunt.initConfig({
 		webpack: {
@@ -39,6 +41,12 @@ module.exports = function(grunt) {
       }
     },
 
+    karma: {
+      unit: {
+        configFile: 'karma.conf.js'
+      }
+    },
+
     copy: {
       html: {
         cwd: 'app/',
@@ -56,12 +64,29 @@ module.exports = function(grunt) {
       }
     },
 
+    nodemon: {
+      dev: {
+        script: 'server.js'
+      }
+    },
+
     jshint: {
 			dev: {
-				src: ['Gruntfile.js', '*.js', 'test/*.js', 'models/*.js', 'routes/*.js']
+				src: ['Gruntfile.js', '*.js', 'test/*.js', 'models/*.js', 'routes/*.js', 'app/**/*.js', 'lib/', 'test/**/test_entry.js', 'test/**/simple_test.js', 'test/**/notes_controller_test.js']
 			},
 			options: {
-				jshintrc: '.jshintrc'
+        "node": true,
+
+          "globals": {
+          "describe": true,
+          "it": true,
+          "before": true,
+          "after": true,
+          "beforeEach": true,
+          "afterEach": true,
+          "angular": true,
+          "expect": true
+          }
 			}
 		},
 
@@ -73,13 +98,13 @@ module.exports = function(grunt) {
 
 		watch: {
 			scripts: {
-				files: ['Gruntfile.js', '*.js', 'test/*.js'],
-				tasks: ['test'],
+				files: ['Gruntfile.js', '*.js', 'test/*.js', 'models/*.js', 'routes/*.js', 'app/**/*.js','app/**/*.html', 'lib/', 'test/**/test_entry.js', 'test/**/simple_test.js', 'test/**/notes_controller_test.js'],
+				tasks: ['jshint:dev', 'build'],
 			}
 		}
   });
 
-	grunt.event.on('watch', function(action, filepath, target) {
-		grunt.log.writeln(target + ': ' + filepath + ' has ' + action);
-	});
+	// grunt.event.on('watch', function(action, filepath, target) {
+	// 	grunt.log.writeln(target + ': ' + filepath + ' has ' + action);
+	// });
 };

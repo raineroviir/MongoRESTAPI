@@ -3,15 +3,35 @@
 process.env.MONGOLAB_URI = 'mongodb://localhost/notes_test';
 require('../server');
 
+
+// var server = require('../server');
 var mongoose = require('mongoose');
 var chai = require('chai');
 var chaihttp = require('chai-http');
 chai.use(chaihttp);
+
 var expect = chai.expect;
 
 var Note = require('../models/Note');
 
 describe('notes REST api', function() {
+
+  // var testToken = '';
+  // before(function(done) {
+  //   server.once('started', function() {
+  //   chai.request('localhost:3000')
+  //     .post('/api/user/create_user')
+  //     .send({email: 'user@test.com', username: 'testUser', password: 'foobar'})
+  //     .end(function(err, res) {
+  //       testToken = res.body.token;
+  //       expect(err).to.eql(null);
+  //       expect(res.body.username).to.eql('testUser');
+  //       expect(res.body.token.length).to.eql(96);
+  //       expect(res.status).to.eql(200);
+  //       done();
+  //     });
+  //   }); //end server.once('started')
+  // }); //end before
 
   after(function(done) {
     mongoose.connection.db.dropDatabase(function() {

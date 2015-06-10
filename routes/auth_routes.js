@@ -8,26 +8,24 @@ var uuid = require('uuid');
 module.exports = function(router, passport) {
   router.use(bodyparser.json());
 
-  router.get('/user/sign_in', passport.authenticate('basic', {session: false}), function(req, res) {
+  router.get('/sign_in', passport.authenticate('basic', {session: false}), function(req, res) {
     req.user.generateToken(process.env.APP_SECRET, function (err, token) {
       if (err) {
         console.log(err);
         return res.status(500).json({msg: 'error generating token'});
       }
-      res.json({email: req.user.email, username: req.user.username, token: token});
+      res.json({token: token});
     });
   });
 
-  router.post('/user/create_user', function(req, res) {
+  router.post('/create_user', function(req, res) {
     var newUserData = JSON.parse(JSON.stringify(req.body));
     var newUser = new User(newUserData);
     createNewUser();
     function createNewUser() {
-
     delete newUserData.email;
     delete newUserData.password;
     newUser.email = req.body.email;
-    newUser.userType = newUserData.userType || 'local';
     newUser.uniqueHash = uuid.v4();
     newUser.generateHash(req.body.password, 8, function (err, hash) {
       if (err) {
@@ -52,7 +50,7 @@ module.exports = function(router, passport) {
           return res.status(500).json({msg: 'error generating token'});
         }
 
-        res.json({email: newUser.email, username: newUser.username, token: token});
+        res.json({token: token});
       });
     });
     };
